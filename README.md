@@ -1,2 +1,2 @@
-# hibernate-tutorial
-Hibernate tutorial with MySQL Workbench
+# Hibernate-Tutorial
+## Spring
