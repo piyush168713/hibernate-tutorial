@@ -1,0 +1,124 @@
+Lecture- 198
+
+
+FAQ: How To View Hibernate SQL Parameter Values
+
+Question:
+
+I see hibernate printing out the query parameters as ? in the console. Is it possible to printout the value that was actually queried on the database. Asking as this would help in the debugging purpose.
+
+Answer:
+
+When using Hibernate, if you log the Hibernate SQL statements, you will see this:
+
+Hibernate: insert into student (email, first_name, last_name, id) values (?, ?, ?, ?)
+
+However, for debugging your application, you want to see the actual parameter values in the Hibernate logs. Basically, you want to get rid  of the question marks in the Hibernate logs.
+
+To view parameter values, we can add a logging framework to our project. For this example, we will make use of the Logback project. Logback does not use any log4j source code. Logback is a separate and independent project.
+
+
+
+Here is an overview of the process:
+1. Add Logback support to your project classpath
+
+2. Create Logback configuration file
+
+3. Run the CreateStudentDemo app
+
+
+
+Here are the detailed steps:
+1. Add Logback support to your project classpath
+
+You have the option of adding logback JAR files manually or using Maven dependencies. Both options are shown below:
+
+Option 1: Download logback JAR files manually
+
+- logback-core-1.2.7.jar
+
+- logback-classic-1.2.7.jar
+
+- slf4j-api-1.7.32.jar
+
+1b. Copy these files to your project’s lib directory
+
+1c. Right-click your Eclipse project and select Properties
+
+1d. Select Build Path > Libraries > Add JARS…
+
+1e. Select the JAR files from the lib directory
+
+Option 2: Maven dependencies (only required if using Maven)
+
+Add the following dependency to your Maven pom.xml file.
+
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.2.7</version>
+</dependency>
+Note: There is no need  to explicitly list dependencies for slf4j-api.jar and logback-core.jar. The logback-classic dependency will automatically pull-in slf4j-api.jar and logback-core.jar into your project since they are transitive dependencies.
+
+
+
+2. Create a Logback configuration file
+
+Notes regarding file location:
+
+- If you are using manual JAR files place this file at src/logback.xml
+
+- If you are using Maven, place this file at src/main/resources/logback.xml
+
+
+
+File: logback.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.luv2code.hibernate.demo" level="TRACE"/>
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <logger name="org.hibernate.type" level="TRACE" />
+
+    <root level="info">
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>
+
+
+Please make note of the following entry:
+
+    <logger name="com.luv2code.hibernate.demo" level="TRACE"/>
+Be sure the package name matches the name of your package.
+
+This Logback configuration file allows you to see a low-level trace of Hibernate and this allows you see the real SQL parameter values.
+
+
+
+3. Run the CreateStudentDemo application
+
+Now run your application. You will see a lot of low-level TRACE logs in the Eclipse Console window.
+
+You will see the logs with the real parameter values.
+
+...
+Creating new student object...
+Saving the student...
+DEBUG SQL - insert into student (email, first_name, last_name) values (?, ?, ?)
+Hibernate: insert into student (email, first_name, last_name) values (?, ?, ?)
+TRACE BasicBinder - binding parameter [1] as [VARCHAR] - [paul@luv2code.com]
+TRACE BasicBinder - binding parameter [2] as [VARCHAR] - [Paul]
+TRACE BasicBinder - binding parameter [3] as [VARCHAR] - [Doe]
+Done!
+...
+
+
+Congrats!

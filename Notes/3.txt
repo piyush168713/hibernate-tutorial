@@ -1,0 +1,18 @@
+How to Run:
+
+Fistly run all the fill in the sequence then
+go to MySQL Workbench then login to hbstudent database
+and then reload the database then it will retrieve in compiler.
+
+
+
+steps to setup MySQL Workbench:
+
+-> go to root file in first
+-> open folder -> open first file of sql-scripts (create-user.sql) -> then run it
+-> now go to home page
+-> setup a new connection -> give the same name to connection name and username -> test your connection
+-> open that file that you have just created i.e. hbstudent 
+-> now go to file -> open sql scripts(open you 2nd sql script file i.e. student-tracker.sql)
+-> then run that file. and then refresh all in left side.
+-> you can test your connection by run TestJdbc.java file.
