@@ -1,0 +1,44 @@
+// File 1
+
+package com.luv2code.hibernate.demo1;
+
+import com.luv2code.hibernate.demo.entity.Student;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+public class CreateStudentDemo {
+    public static void main(String[] args) {
+
+        // Create Session factory
+        SessionFactory factory = new Configuration()
+                .configure("com/luv2code/jdbc/hibernate.cfg.xml")       // must specify the path of hibernate.cfg.xml file.
+                .addAnnotatedClass(Student.class)
+                .buildSessionFactory();
+
+        // Create session
+        Session session = factory.getCurrentSession();
+
+        try {
+            // Create a student object
+            System.out.println("Create a student object...");
+            Student tempStudent = new Student("Piyush", "Kumar", "piyush@luv2code.com");
+
+            // Start a transaction
+            session.beginTransaction();
+
+            // Save the student Object
+            System.out.println("Saving the student...");
+            session.save(tempStudent);
+
+            // commit transaction
+            session.getTransaction().commit();
+
+            System.out.println("Done!");
+
+        }
+        finally{
+            factory.close();
+        }
+    }
+}
